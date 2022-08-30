@@ -1,0 +1,26 @@
+<div class="currency-converter">
+    <div class="currency-converter__container">
+        <div class="currency-converter__row">
+            <div class="currency-converter__box">
+                <div class="currency-converter__content">
+                      <div class="content-input">
+                        <select class="currency-select-field" >
+                            <option *ngFor="let currency of currencies" [value]="currency.designation">{{currency.designation}}</option>
+                        </select>
+                        <input type="number" (input)="handleInput($event)" class="currency-input-field" value="{{valueInputFrom}}">
+                      </div>
+                      <div class="sync">
+                        <mat-icon class="alt-icon" style="font-size: 30px;" aria-hidden="false" fontIcon="sync_alt"></mat-icon>
+                      </div>
+                      <div class="content-input">
+                        <select class="currency-select-field" >
+                            <option *ngFor="let currency of currencies" [value]="currency.designation">{{currency.designation}}</option>
+                        </select>
+                        <input type="number" class="currency-input-field" value="{{valueInputTo}}">
+                      </div>
+                </div>   
+          </div>
+        </div>
+    </div>
+    
+</div>

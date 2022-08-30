@@ -1,0 +1,24 @@
+<header class="header">
+    <div class="header__container">
+        <div class="header__row">
+            <ul class="header__currencies">
+                <li class="currency">
+                    <mat-icon aria-hidden="false" aria-label="Dollar" fontIcon="attach_money"></mat-icon>
+                    <a href="#" *ngIf="loaded">
+                        
+                        <span>USD</span>
+                        {{USD.toFixed(2)}}
+                    </a>
+                </li>
+                <li class="currency">
+                    <mat-icon aria-hidden="false" aria-label="Dollar" size="6px" fontIcon="euro"></mat-icon>
+                    <a href="#">
+                        <span>EUR</span>
+                        {{EUR.toFixed(2)}}
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</header>
