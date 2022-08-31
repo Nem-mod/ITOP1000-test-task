@@ -1,5 +1,6 @@
 .currency-converter {
     margin-top: 50px;
+    
     // .currency-converter__container
     &__container{
         max-width: 1300px;
@@ -8,8 +9,12 @@
     // .currency-converter__box
     &__box {
         flex: 0.6;
+        display: flex;
+        align-items: center;
         padding: 30px;
         border: 1px solid #e0e1e5;
+        min-height: 300px;
+        background-color:  #50b7f5;;
         border-radius: 15px;
     }
 
@@ -29,6 +34,7 @@
             justify-content: center;
             align-items: center;
             font-size: 30px;
+            color: #e0e1e5;
         }
         .content-input {
         }
@@ -38,9 +44,11 @@
             font-size: 20px;
             border: 1px solid rgb(112, 112, 112);
             box-shadow: 0px 0px 10px rgb(179 187 198 / 45%);
-            border-radius: 3px;
+            border-radius: 5px;
         }
         .currency-input-field {
+            background: #fff;;
+
             margin-top: 10px;
             width: 100%;
             padding: 20px;
@@ -53,7 +61,15 @@
             font-size: 40xp;
             overflow: visible;
         }
-       
+        input{
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
     }
 }
 

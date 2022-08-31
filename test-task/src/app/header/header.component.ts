@@ -1,35 +1,53 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Currency } from '../currency-interface/currency-interface';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
+
 export class HeaderComponent implements OnInit {
-  USD: number = 0;
-  EUR: number = 0;
-  response: any;
+  // array of currencies which display on header
+  currencies: Currency[] = []; 
+
+  // currency load flag false (not loaded) | true (loaded)
   loaded: boolean = false;
-  constructor(private http: HttpClient) {
 
-  }
-  value: number = 40;
-  
+  constructor(private http: HttpClient) {}
+ 
+  // onload function 
   ngOnInit(): void {
-    this.http.get('https://api.currencyfreaks.com/latest?apikey=c7d12d979e444957a32d8d01cc2c8484')
-    .subscribe((res) => {
-      this.response = res; 
-      this.USD = Number(this.response.rates.UAH);
-      this.EUR= this.USD * Number(this.response.rates.EUR);
-      this.loaded = true;
-    })
-    
+    this.getNewCurrencyFromTo('USD', 'UAH', 1);
+    this.getNewCurrencyFromTo('EUR', 'UAH', 1);
+    this.loaded = true;
   }
+  
+  // get and push new currency 
 
-  search(){
-    
+  getNewCurrencyFromTo(from: string, to: string, amount: number):any {
+    try {
+     
+      // get requets to api.apilayer.com
+
+      this.http
+        .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`)
+        .subscribe(res => {
+          let result: any = res;
+          const currency: Currency = {
+            name: result.query.to,
+            base: result.query.from,
+            value: result.result
+          }
+          // push new currency data
+          this.currencies.push(currency);
+        })
+    } catch (error) {
+      console.log(error);
+    }
   }
-
-
 }
+
+
+
