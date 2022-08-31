@@ -1,0 +1,39 @@
+<div class="currency-converter">
+    <div class="currency-converter__container">
+        <div class="currency-converter__row">
+            <div class="currency-converter__box">
+                <div class="currency-converter__content">
+                      <div class="content-input">
+                        <select (change)="handleSelect($event)" class="currency-select-field" id="from"  value="{{currencyInputFrom}}">
+                            <option  [value]="currencyMainOptions[0]">{{currencyMainOptions[0]}}</option>
+                            <option  [value]="currencyMainOptions[1]">{{currencyMainOptions[1]}}</option>
+                            <option *ngFor="let option of currencyAdditionOptions" [value]="option">{{option}}</option>
+                        </select>
+                        <div class="currency-input-field">
+                          <label for="input">{{currencyInputFrom}}</label>
+                          <input (input)="handleInput($event)" type="number" id="from" value="{{fixNumber(valueInputFrom)}}">
+                        </div>
+                      </div>
+                      <div class="sync">
+                        <button (click)="handleSwap($event)" mat-icon-button aria-label="Example icon-button with a heart icon">
+                        <mat-icon  class="alt-icon" style="font-size: 30px;" aria-hidden="false" fontIcon="sync_alt"></mat-icon>
+                        </button>
+                      </div>
+                      <div class="content-input">
+                        <select (change)="handleSelect($event)" class="currency-select-field" id="to" value="{{currencyInputTo}}" >
+                          <option  [value]="currencyMainOptions[1]">{{currencyMainOptions[1]}}</option>
+                          <option  [value]="currencyMainOptions[0]">{{currencyMainOptions[0]}}</option>
+                            <option *ngFor="let option of currencyAdditionOptions" [value]="option">{{option}}</option>
+                        </select>
+                        <div class="currency-input-field">
+                          <label for="input">{{currencyInputTo}}</label>
+                          <input (input)="handleInput($event)" name="number" type="number"  id="to" value="{{fixNumber(valueInputTo)}}">
+
+                        </div>
+                      </div>
+                </div>   
+          </div>
+        </div>
+    </div>
+    
+</div>

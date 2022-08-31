@@ -1,1 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap');
+@import url(./nilstyle.scss);
+
+body{
+    font-family: Heebo;
+}
+html, body { height: 100%; }
+body { margin: 0; }

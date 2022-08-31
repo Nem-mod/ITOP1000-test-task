@@ -1,0 +1,15 @@
+<header class="header">
+    <div class="header__container">
+        <div class="header__row">
+            <ul  *ngIf="loaded" class="header__currencies">
+                <li class="currency"*ngFor="let iterCurrency of currencies">
+                    <mat-icon aria-hidden="false" aria-label="Dollar" fontIcon="attach_money"></mat-icon>
+                    <a href="#" *ngIf="loaded">
+                        <span>{{iterCurrency.base}}</span>
+                        {{iterCurrency.value.toFixed(2)}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
