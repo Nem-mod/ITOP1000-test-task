@@ -38,6 +38,12 @@ export class CurrencyConverterComponent implements OnInit {
         .subscribe(res => {
           let result: any = res;
           this.scale = result.result;
+          if(this.valueInputTo !== null && this.valueInputFrom !== null)
+          {
+            this.valueInputFrom = this.valueInputFrom;
+            this.valueInputTo =this.valueInputFrom * this.scale;
+          }
+          
         })
     } catch (error) {
       console.log(error);
@@ -85,7 +91,7 @@ export class CurrencyConverterComponent implements OnInit {
     let tmp =  this.currencyInputFrom;
     this.currencyInputFrom =  this.currencyInputTo;
     this.currencyInputTo = tmp;
-    let ntmp = this.valueInputFrom;
+    this.getNewCurrencyFromTo(this.currencyInputFrom, this.currencyInputTo, 1 )
   }
 
   // set amount of digit after dot
