@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import Currencies from '../currencies';
 
 @Component({
   selector: 'app-currency-converter',
@@ -8,13 +10,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 
 export class CurrencyConverterComponent implements OnInit {
-  
-  currencyMainOptions: String[] = [ "USD", "UAH" ];
-  currencyAdditionOptions: String[] = [ "EUR", "CHF", "CZK", "CNY" ];
+  currencies: string[] = Currencies;
   scale: number = 0;
   loaded: boolean = false;
-  currencyInputFrom: string = "USD";
-  currencyInputTo: string = "UAH";
+  currencyInputFrom: any;
+  currencyInputTo: any;
   valueInputFrom: number | null = null;
   valueInputTo: number | null = null;
 
@@ -22,32 +22,28 @@ export class CurrencyConverterComponent implements OnInit {
  
   // onload function 
   ngOnInit(): void {
-    this.getNewCurrencyFromTo('USD', 'UAH', 1);
-    this.getNewCurrencyFromTo('EUR', 'UAH', 1);
+    this.currencyInputFrom = this.currencies[0];
+    this.currencyInputTo = this.currencies[1];
     this.loaded = true;
+    this.getNewCurrencyFromTo(this.currencyInputFrom, this.currencyInputTo, 1);
   }
   
   // get and push new currency 
 
   getNewCurrencyFromTo(from: string, to: string, amount: number):any {
-    try {
-      // get requets to api.apilayer.com
+    // get requets to api.exchangerate
 
-      this.http
-        .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`,)
-        .subscribe(res => {
-          let result: any = res;
-          this.scale = result.result;
-          if(this.valueInputTo !== null && this.valueInputFrom !== null)
-          {
-            this.valueInputFrom = this.valueInputFrom;
-            this.valueInputTo =this.valueInputFrom * this.scale;
-          }
-          
-        })
-    } catch (error) {
-      console.log(error);
-    }
+    this.http
+      .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`,)
+      .subscribe(res => {
+        let result: any = res;
+        this.scale = result.result;
+        if(this.valueInputTo !== null && this.valueInputFrom !== null)
+        {
+          this.valueInputFrom = this.valueInputFrom;
+          this.valueInputTo =this.valueInputFrom * this.scale;
+        }
+      })
   }
   
   // select handler
@@ -68,20 +64,16 @@ export class CurrencyConverterComponent implements OnInit {
   // input handler
 
   handleInput(e: any) {
-    try {
-      switch(e.target.id){
-        case 'from' : { 
-          this.valueInputFrom = e.target.value;
-          this.valueInputTo = e.target.value * this.scale;
-          break;
-        }
-        case 'to' : {
-          this.valueInputTo = e.target.value;
-          this.valueInputFrom = e.target.value / this.scale;
-        }
+    switch(e.target.id){
+      case 'from' : { 
+        this.valueInputFrom = e.target.value;
+        this.valueInputTo = e.target.value * this.scale;
+        break;
       }
-    } catch (error) {
-      console.log(error)
+      case 'to' : {
+        this.valueInputTo = e.target.value;
+        this.valueInputFrom = e.target.value / this.scale;
+      } 
     }
   }
 

@@ -27,27 +27,19 @@ export class HeaderComponent implements OnInit {
   // get and push new currency 
 
   getNewCurrencyFromTo(from: string, to: string, amount: number):any {
-    try {
-     
-      // get requets to api.apilayer.com
-
-      this.http
-        .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`)
-        .subscribe(res => {
-          let result: any = res;
-          const currency: Currency = {
-            name: result.query.to,
-            base: result.query.from,
-            value: result.result
-          }
-          // push new currency data
-          this.currencies.push(currency);
-        })
-    } catch (error) {
-      console.log(error);
-    }
+    // get requets to api.exchangerate
+    
+    this.http
+      .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`)
+      .subscribe(res => {
+        let result: any = res;
+        const currency: Currency = {
+          name: result.query.to,
+          base: result.query.from,
+          value: result.result
+        }
+        // push new currency data
+        this.currencies.push(currency);
+      })
   }
 }
-
-
-
