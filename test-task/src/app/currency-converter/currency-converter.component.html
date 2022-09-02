@@ -4,7 +4,7 @@
             <div class="currency-converter__box">
                 <div class="currency-converter__content">
                       <div class="content-input">
-                        <select (change)="handleSelect($event)" class="currency-select-field" id="from"  value="{{currencyInputFrom}}">
+                        <select (change)="handleSelect($event)"  [(ngModel)]='currencyInputFrom' class="currency-select-field" id="from"  >
                         <option *ngFor="let option of currencies" [value]="option">{{option}}</option> 
                         </select>
                         <div class="currency-input-field">
@@ -18,7 +18,7 @@
                         </button>
                       </div>
                       <div class="content-input">
-                        <select (change)="handleSelect($event)"  [(ngModel)]='currencyInputTo' class="currency-select-field" id="to" [value]="currencyInputTo" >
+                        <select (change)="handleSelect($event)"  [(ngModel)]='currencyInputTo' class="currency-select-field" id="to" >
                             <option *ngFor="let option of currencies" [value]="option">{{option}}</option>
                         </select>
                         <div class="currency-input-field">
