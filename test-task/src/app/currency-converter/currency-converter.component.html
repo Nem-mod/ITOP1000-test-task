@@ -9,7 +9,8 @@
                         </select>
                         <div class="currency-input-field">
                           <label for="input">{{currencyInputFrom}}</label>
-                          <input (input)="handleInput($event)" [(ngModel)] = "valueInputFrom" type="number" id="from">
+                          <span>{{valueInputFrom}}</span>
+                          <input (input)="handleInput($event)" [(ngModel)] = 'valueInputFrom' visibility="hidden" class="currency-input" type="number" id="from">
                         </div>
                       </div>
                       <div class="sync">
@@ -23,12 +24,12 @@
                         </select>
                         <div class="currency-input-field">
                           <label for="input">{{currencyInputTo}}</label>
-                          <input (input)="handleInput($event)" [(ngModel)] = "valueInputTo" type="number"  id="to">
+                          <span>{{valueInputTo}}</span>
+                          <input (input)="handleInput($event)" [(ngModel)] = "valueInputTo" visibility="hidden" class="currency-input" calss="" id="to">
                         </div>
                       </div>
                 </div>   
           </div>
         </div>
     </div>
-    
 </div>
