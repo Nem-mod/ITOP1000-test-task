@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import Currencies from '../currencies';
-
+import { CurrencyService } from '../currency.service';
+import { Observable, debounceTime, fromEvent, distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-currency-converter',
   templateUrl: './currency-converter.component.html',
@@ -10,14 +8,16 @@ import Currencies from '../currencies';
 })
 
 export class CurrencyConverterComponent implements OnInit {
-  currencies: string[] = Currencies;
+  currencies: string[] = this.currencyService.currencies;
   loaded: boolean = false;
+  
   currencyInputFrom: any;
   currencyInputTo: any;
+  
   valueInputFrom: number = 0;
   valueInputTo: number = 0;
 
-  constructor(private http: HttpClient) {}
+  constructor(private currencyService: CurrencyService) {}
  
   // onload function 
   ngOnInit(): void {
@@ -26,27 +26,39 @@ export class CurrencyConverterComponent implements OnInit {
     this.loaded = true;
   }
   
-  // get and push new currency 
+  // // get and push new currency 
 
-  getNewCurrencyFromTo(from: string, to: string, amount: number):any {
-    // get requets to api.exchangerate
-
-    this.http
-      .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`,)
+  getNewCurrencyFromTo():any {
+    return this.currencyService.getCurrencyExchange(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom)
       .subscribe(res => {
         let data: any = res;
-        if(this.valueInputTo !== null && this.valueInputFrom !== null)
-        {
-          this.valueInputFrom = this.valueInputFrom;
-          this.valueInputTo = data.result;
-          console.log(this.valueInputFrom, this.valueInputTo)
-        }
+        this.valueInputTo = data.result;
       })
   }
+
+  setNewCurrencyFromTo(direction: string):any {
+    switch(direction){
+      case 'from' : { 
+        this.currencyService.getCurrencyExchange(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom)
+          .subscribe((res) => {
+            let data: any = res;
+            this.valueInputTo = data.result;
+          })
+        break;
+      }
+      case 'to' : {
+        this.currencyService.getCurrencyExchange( this.currencyInputTo, this.currencyInputFrom, this.valueInputTo)
+          .subscribe((res) => {
+            let data: any = res;
+            this.valueInputFrom = data.result;
+          })
+      } 
+    }
+}
   // select handler
 
   handleSelect(e: any){
-    this.getNewCurrencyFromTo(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom )
+    this.getNewCurrencyFromTo();
   }
   
   // input handler
@@ -56,8 +68,15 @@ export class CurrencyConverterComponent implements OnInit {
       this.valueInputFrom = 0;
       this.valueInputTo = 0;
     }
-    // if(this.valueInputFrom)
-    // this.getNewCurrencyFromTo(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom )
+    const subsctiption: Observable<Event> = fromEvent(e.target, 'input');
+    subsctiption
+    .pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(() => {
+      this.setNewCurrencyFromTo(e.target.id);
+    })
   }
 
   // swap currencies to convert
@@ -66,16 +85,9 @@ export class CurrencyConverterComponent implements OnInit {
     let tmp =  this.currencyInputFrom;
     this.currencyInputFrom =  this.currencyInputTo;
     this.currencyInputTo = tmp;
-    this.getNewCurrencyFromTo(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom )
+    this.getNewCurrencyFromTo();
   }
 
-  // set amount of digit after dot
 
-  fixNumber(num: any){
-    if(typeof num === 'number'){
-      const result = num.toFixed(2)
-      return result;
-    }
-    return num;
-  }
+  
 }
