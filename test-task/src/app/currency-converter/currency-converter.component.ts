@@ -9,7 +9,6 @@ import { Observable, debounceTime, fromEvent, distinctUntilChanged } from 'rxjs'
 
 export class CurrencyConverterComponent implements OnInit {
   currencies: string[] = this.currencyService.currencies;
-  loaded: boolean = false;
   
   currencyInputFrom: any;
   currencyInputTo: any;
@@ -23,12 +22,11 @@ export class CurrencyConverterComponent implements OnInit {
   ngOnInit(): void {
     this.currencyInputFrom = this.currencies[0];
     this.currencyInputTo = this.currencies[1];
-    this.loaded = true;
   }
   
   // // get and push new currency 
 
-  getNewCurrencyFromTo():any {
+  getNewCurrency():any {
     return this.currencyService.getCurrencyExchange(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom)
       .subscribe(res => {
         let data: any = res;
@@ -36,38 +34,9 @@ export class CurrencyConverterComponent implements OnInit {
       })
   }
 
-  setNewCurrencyFromTo(direction: string):any {
-    switch(direction){
-      case 'from' : { 
-        this.currencyService.getCurrencyExchange(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom)
-          .subscribe((res) => {
-            let data: any = res;
-            this.valueInputTo = data.result;
-          })
-        break;
-      }
-      case 'to' : {
-        this.currencyService.getCurrencyExchange( this.currencyInputTo, this.currencyInputFrom, this.valueInputTo)
-          .subscribe((res) => {
-            let data: any = res;
-            this.valueInputFrom = data.result;
-          })
-      } 
-    }
-}
-  // select handler
-
-  handleSelect(e: any){
-    this.getNewCurrencyFromTo();
-  }
-  
   // input handler
 
   handleInput(e: any) {
-    if(this.valueInputFrom === null || this.valueInputTo === null ) {
-      this.valueInputFrom = 0;
-      this.valueInputTo = 0;
-    }
     const subsctiption: Observable<Event> = fromEvent(e.target, 'input');
     subsctiption
     .pipe(
@@ -75,7 +44,23 @@ export class CurrencyConverterComponent implements OnInit {
       distinctUntilChanged()
     )
     .subscribe(() => {
-      this.setNewCurrencyFromTo(e.target.id);
+      switch(e.target.id){
+        case 'from' : { 
+          this.currencyService.getCurrencyExchange(this.currencyInputFrom, this.currencyInputTo, this.valueInputFrom)
+            .subscribe((res) => {
+              let data: any = res;
+              this.valueInputTo = data.result;
+            })
+          break;
+        }
+        case 'to' : {
+          this.currencyService.getCurrencyExchange( this.currencyInputTo, this.currencyInputFrom, this.valueInputTo)
+            .subscribe((res) => {
+              let data: any = res;
+              this.valueInputFrom = data.result;
+            })
+        } 
+      }
     })
   }
 
@@ -85,9 +70,6 @@ export class CurrencyConverterComponent implements OnInit {
     let tmp =  this.currencyInputFrom;
     this.currencyInputFrom =  this.currencyInputTo;
     this.currencyInputTo = tmp;
-    this.getNewCurrencyFromTo();
+    this.getNewCurrency();
   }
-
-
-  
 }

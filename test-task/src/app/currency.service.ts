@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { fromEvent, scan, debounce, interval,take, map, concatAll} from 'rxjs';
+import { map } from 'rxjs';
 
 interface currency {
   from: string,
@@ -31,7 +31,6 @@ export class CurrencyService {
       .get(`https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`)
       .pipe(
         map(response => {
-          
           const data:any = response;
           const currency: currency = {
             from: data.query.from,
